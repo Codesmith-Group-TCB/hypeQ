@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { addMediaToDb, getMediaFromAPI } from '../../async';
 import useStore from '../store';
 function SearchBar() {
   const searchInput = useStore((state) => state.searchInput);
