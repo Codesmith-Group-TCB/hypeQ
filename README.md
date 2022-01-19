@@ -1,2 +1,1 @@
-# redesigned-potato
-Media tracker
+# hypeQ
