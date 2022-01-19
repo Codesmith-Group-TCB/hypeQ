@@ -36,7 +36,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
     "styled-components": "^5.3.3",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "zustand": "^3.6.9"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
