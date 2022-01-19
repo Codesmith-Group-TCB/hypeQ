@@ -42,7 +42,7 @@ mediaController.addMedia = (req, res, next) => {
     .then((data) => {
       db.query('SELECT * FROM media;')
         .then((data) => {
-          res.locals.newList = data.rows;
+          res.locals.newMedia = data.rows;
           return next();
         })
         .catch((e) => {
@@ -64,46 +64,57 @@ mediaController.addMedia = (req, res, next) => {
     });
 };
 
-mediaController.updateMedia = (req, res, next) => {
-  // const user_id = req.query.user_id;
-  const media_id = req.params.media;
-  // $1 = whichever column user is editing FROM REQ PARAMS
-  // $2 = new info to update FROM REQUEST BODY
-  const query =
-    'UPDATE media SET title = $1, category = $2, duration = $3, priority = $4, url = $5, user_id = $6 WHERE media_id = $7';
+// mediaController.updateMedia = (req, res, next) => {
+//   // const user_id = req.query.user_id;
+//   const media_id = req.params.media;
+//   // $1 = whichever column user is editing FROM REQ PARAMS
+//   // $2 = new info to update FROM REQUEST BODY
+//   const query =
+//     'UPDATE media SET title = $1, category = $2, duration = $3, priority = $4, url = $5, user_id = $6 WHERE media_id = $7';
 
-  const data = [
-    req.body.title,
-    req.body.category,
-    req.body.duration,
-    req.body.priority,
-    req.body.url,
-    req.body.user_id,
-    media_id,
-  ];
+//   const data = [
+//     req.body.title,
+//     req.body.category,
+//     req.body.duration,
+//     req.body.priority,
+//     req.body.url,
+//     req.body.user_id,
+//     media_id,
+//   ];
 
-  db.query(query, data)
-    .then(() => {
-      res.locals.updatedMedia = req.body;
-      return next();
-    })
-    .catch((e) => {
-      console.log('error at mediaController.updateMedia', e);
-      return next({
-        log: 'Express error handler caught in updateMedia middleware error',
-        message: { err: 'An error occurred in updateMedia middleware error' },
-      });
-    });
-};
+//   db.query(query, data)
+//     .then(() => {
+//       res.locals.updatedMedia = req.body;
+//       return next();
+//     })
+//     .catch((e) => {
+//       console.log('error at mediaController.updateMedia', e);
+//       return next({
+//         log: 'Express error handler caught in updateMedia middleware error',
+//         message: { err: 'An error occurred in updateMedia middleware error' },
+//       });
+//     });
+// };
 
 mediaController.deleteMedia = (req, res, next) => {
-  const id = req.params.media;
-  const query = 'DELETE FROM media WHERE media_id = $1;';
+  const query = 'DELETE FROM media WHERE imdbid = $1;';
 
-  db.query(query, [id])
+  db.query(query, [req.body.imdbid])
     .then(() => {
-      console.log('media deleted!');
-      return next();
+      db.query('SELECT * FROM media;')
+        .then((data) => {
+          res.locals.newMedia = data.rows;
+          return next();
+        })
+        .catch((e) => {
+          console.log('error at mediaController.deleteMedia.GET', e);
+          return next({
+            log: 'Express error handler caught in deleteMedia.GET middleware error',
+            message: {
+              err: 'An error occurred in deleteMedia.GET middleware error',
+            },
+          });
+        });
     })
     .catch((e) => {
       console.log('error at mediaController.deleteMedia', e);
