@@ -1,13 +1,12 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import Header from './components/Header';
-import List from './components/List.js';
+import Result from './components/Result.js';
 import DurationDropdown from './components/DurationDropdown';
-
+import SearchBar from './components/SearchBar.js';
 
 // const allMedia = [ { media_id: 2, title: "silicon valley", category: "show", duration: 30, priority: 1, url: null, user_id: 1 }, { media_id: 3, title: "queen's gambit" category: "show", duration: 30, priority: 1, url: null, user_id: 1 }, ]
 
 function App() {
-
   const [allMedia, setAllMedia] = useState([]);
 
   // https://dmitripavlutin.com/react-useeffect-explanation/
@@ -21,11 +20,12 @@ function App() {
   }, []);
 
   return (
-    <div className='wrapper'>
+    <div className='container'>
       <Header />
-      {/* <div className='tabContainer'><DurationDropdown /></div> */}
-     
-      <List allMedia={allMedia} />
+      <div>
+        <SearchBar />
+        <Result allMedia={allMedia} />
+      </div>
     </div>
   );
 }
