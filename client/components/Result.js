@@ -1,5 +1,4 @@
 import React from 'react';
-import Card from './Card.js';
 import useStore from '../store';
 
 function Result() {
