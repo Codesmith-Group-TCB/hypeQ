@@ -7,7 +7,7 @@ function Result() {
   const list = useStore((state) => state.list);
 
   function addMediaToDb(imdbID) {
-    fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=9ac2fb0d`)
+    fetch(`http://www.omdbapi.com/?i=${imdbID}&plot=full&apikey=9ac2fb0d`)
       .then((res) => res.json())
       .then((data) => {
         //data is obj
