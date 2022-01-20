@@ -1,15 +1,12 @@
-import React from "react"
-import clapperBoard from "./images/clapperBoard.png"
+import React from 'react';
+import HypeHeader1 from './images/HypeHeader1.png';
 
 function Header() {
   return (
-    <div className="header-div">
-
-      <h1><img id="logo" src={clapperBoard} />
-      <span id="title">hype<span className="black">Q</span></span>
-      </h1>
+    <div className='header-div'>
+      <img className='headerImg' src={HypeHeader1} alt='headerlogo' />
     </div>
-  )
+  );
 }
 
 export default Header;
