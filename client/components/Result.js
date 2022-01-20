@@ -44,7 +44,7 @@ function Result() {
   return (
     <div className='container'>
       {searchResult.map(({ Title, Year, imdbID, Poster }) => (
-        <div className='card_item'>
+        <div className='card_item' key={imdbID}>
           <img className='resultImg' src={Poster} alt='movieposter' />
           <div>{Title}</div>
           <div>{Year}</div>

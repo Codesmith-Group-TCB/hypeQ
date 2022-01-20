@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import useStore from '../store.js';
-import list from '../components/styles/list.css';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { RiMovie2Line, RiMovie2Fill } from 'react-icons/ri';
 import { BsCameraReelsFill, BsCameraReels } from 'react-icons/bs';
+import { AiFillDelete, AiOutlineDelete } from 'react-icons/ai';
 
 const fillColorArray = [
   '#f17a45',
@@ -30,10 +30,28 @@ const reorder = (list, startIndex, endIndex) => {
 
 function MediaItem({ obj, index }) {
   const [rating, setRating] = useState(0);
+  const setList = useStore((state) => state.setList);
+
   const handleRating = (rate) => {
-    console.log(rate);
+    // console.log(rate);
     setRating(rate);
   };
+
+  const handleDelete = (imdbid) => {
+    fetch(`http://localhost:3000/api/list/delete/${imdbid}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((dbres) => dbres.json())
+      .then((dbdata) => {
+        setList(dbdata);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Draggable draggableId={obj.imdbid} index={index}>
       {(provided) => (
@@ -48,12 +66,18 @@ function MediaItem({ obj, index }) {
             onClick={handleRating}
             ratingValue={rating}
             fillColorArray={fillColorArray}
-            emptyIcon={<RiMovie2Line size={18} color='black'/>}
+            emptyIcon={<RiMovie2Line size={18} color='black' />}
             fullIcon={<RiMovie2Fill size={18} />}
           />
           <p>{obj.title}</p>
           <p>{obj.year}</p>
-          <button>Delete</button>
+          <button
+            onClick={() => {
+              handleDelete(obj.imdbid);
+            }}
+          >
+            <AiFillDelete />
+          </button>
         </div>
       )}
     </Draggable>
@@ -63,9 +87,7 @@ function MediaItem({ obj, index }) {
 // equivalent to what is being rendered in our return for ListItems
 const MediaList = React.memo(function MediaList({ list }) {
   return list.map((obj, index) => (
-    // <div className='eachItem'>
     <MediaItem obj={obj} index={index} key={obj.imdbid} />
-    // </div>
   ));
 });
 
