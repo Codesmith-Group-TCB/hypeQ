@@ -22,7 +22,6 @@ mediaController.getList = (req, res, next) => {
 };
 
 mediaController.addMedia = (req, res, next) => {
-  // const user_id = req.query.user_id;
   const query =
     'INSERT INTO media (imdbid, title, year, rated, released,runtime,genre,plot,poster, rank) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);';
 
@@ -36,7 +35,7 @@ mediaController.addMedia = (req, res, next) => {
     req.body.genre,
     req.body.plot,
     req.body.poster,
-    0,
+    20,
   ];
 
   db.query(query, data)
@@ -55,10 +54,8 @@ mediaController.addMedia = (req, res, next) => {
 
 mediaController.deleteMedia = (req, res, next) => {
   const query = `DELETE FROM media WHERE imdbid = $1;`;
-
   db.query(query, [req.params.imdbid])
     .then(() => {
-      // console.log('data from deleteMedia Controller', data);
       return next();
     })
     .catch((e) => {
@@ -118,19 +115,37 @@ mediaController.addWatched = (req, res, next) => {
     });
 };
 
-mediaController.updateRank = (req, res, next) => {
-  // const id = req.query.user_id; // when we have more than one user
-  const query = 'UPDATE watched SET rank=$1 WHERE imdbid=$2 RETURNING rank';
-  db.query(query)
-    .then((result) => {
-      res.locals.watched = result.rows;
+mediaController.deleteWatched = (req, res, next) => {
+  const query = `DELETE FROM watched WHERE imdbid = $1;`;
+
+  db.query(query, [req.params.imdbid])
+    .then(() => {
+      // console.log('data from deleteMedia Controller', data);
       return next();
     })
     .catch((e) => {
-      console.log('error at mediaController.getWatched', e);
+      console.log('error at mediaController.deleteWatched', e);
       return next({
-        log: 'Express error handler caught in getWatched middleware error',
-        message: { err: 'An error occurred in getWatched middleware error' },
+        log: 'Express error handler caught in deleteWatched middleware error',
+        message: { err: 'An error occurred in deleteWatched middleware error' },
+      });
+    });
+};
+
+mediaController.updateRank = (req, res, next) => {
+  //req.body.rank
+  const values = [req.body.rank, req.body.imdbid];
+  const query = 'UPDATE watched SET rank=$1 WHERE imdbid=$2 RETURNING rank';
+  db.query(query, values)
+    .then((result) => {
+      res.locals.rank = result.rows[0].rank;
+      return next();
+    })
+    .catch((e) => {
+      console.log('error at mediaController.updateRank', e);
+      return next({
+        log: 'Express error handler caught in updateRank middleware error',
+        message: { err: 'An error occurred in updateRank middleware error' },
       });
     });
 };

@@ -18,26 +18,38 @@ router.post(
 );
 // Delete a media from the database
 // http://localhost:3000/api/"media_id"
-router.post('/list/delete/:imdbid', mediaController.deleteMedia, mediaController.getList, (req, res) => {
-  // console.log('req.params.imdbid', req.params.imdbid);
-  // console.log('res.locals.test', res.locals.test);
-  // console.log('req.params.imdbid', req.params.imdbid);
-  return res.status(200).json(res.locals.media);
-});
+router.post(
+  '/list/delete/:imdbid',
+  mediaController.deleteMedia,
+  mediaController.getList,
+  (req, res) => {
+    res.status(200).json(res.locals.media);
+  }
+);
 
-router.get('/watched', (req, res) => {
+router.get('/watched', mediaController.getWatched, (req, res) => {
   res.status(200).json(res.locals.watched);
 });
 
-router.post('/watched', (req, res) => {
-  res.status(200).json(res.locals.watched);
-});
+router.post(
+  '/watched',
+  mediaController.addWatched,
+  mediaController.getWatched,
+  (req, res) => {
+    res.status(200).json(res.locals.watched);
+  }
+);
 
-router.delete('/watched', (req, res) => {
-  res.status(200).json(res.locals.watched);
-});
+router.delete(
+  '/watched/delete/:imdbid',
+  mediaController.deleteWatched,
+  mediaController.getWatched,
+  (req, res) => {
+    res.status(200).json(res.locals.watched);
+  }
+);
 
-router.patch('/watched/rank', (req, res) => {
-  res.status(200).json();
+router.post('/watched/rank', mediaController.updateRank, (req, res) => {
+  res.status(200).json(res.locals.rank);
 });
 module.exports = router;
