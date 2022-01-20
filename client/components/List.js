@@ -62,13 +62,13 @@ function MediaItem({ obj, index }) {
           className='eachItem'
         >
           <img className='listImg' src={obj.poster} alt='list_img' />
-          <Rating
+          {/* <Rating
             onClick={handleRating}
             ratingValue={rating}
             fillColorArray={fillColorArray}
             emptyIcon={<RiMovie2Line size={18} color='black' />}
             fullIcon={<RiMovie2Fill size={18} />}
-          />
+          /> */}
           <p>{obj.title}</p>
           <p>{obj.year}</p>
           <button
