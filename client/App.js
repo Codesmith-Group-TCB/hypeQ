@@ -6,14 +6,18 @@ import List from './components/List';
 
 function App() {
   return (
-    <div className='container'>
+    <div className=''>
       <Header />
       <div className='SearchContainer'>
         <SearchBar />
       </div>
       <div className='MainContainer'>
-        <Result />
-        <List />
+        <div className='listContainer'>
+          <List />
+        </div>
+        <div className='resultContainer'>
+          <Result />
+        </div>
       </div>
     </div>
   );

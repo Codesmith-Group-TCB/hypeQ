@@ -10,7 +10,6 @@ function Result() {
     fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=9ac2fb0d`)
       .then((res) => res.json())
       .then((data) => {
-        //data is obj
         const body = {
           imdbid: data.imdbID,
           title: data.Title,
@@ -43,24 +42,22 @@ function Result() {
       });
   }
   return (
-    <div>
-      <div className='list-cont'>
-        {searchResult.map(({ Title, Year, imdbID, Poster }) => (
-          <div className='card_item'>
-            <img src={Poster} alt='movieposter' />
-            <div>{Title}</div>
-            <div>{Year}</div>
-            <button
-              className='add_btn'
-              onClick={() => {
-                addMediaToDb(imdbID);
-              }}
-            >
-              Add
-            </button>
-          </div>
-        ))}
-      </div>
+    <div className='container'>
+      {searchResult.map(({ Title, Year, imdbID, Poster }) => (
+        <div className='card_item'>
+          <img className='resultImg' src={Poster} alt='movieposter' />
+          <div>{Title}</div>
+          <div>{Year}</div>
+          <button
+            className='add_btn'
+            onClick={() => {
+              addMediaToDb(imdbID);
+            }}
+          >
+            Add
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
