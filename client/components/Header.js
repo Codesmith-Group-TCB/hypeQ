@@ -4,7 +4,7 @@ import HypeHeader1 from './images/HypeHeader1.png';
 function Header() {
   return (
     <div className='header-div'>
-      <img src={HypeHeader1} alt='headerlogo' />
+      <img className='headerImg' src={HypeHeader1} alt='headerlogo' />
     </div>
   );
 }

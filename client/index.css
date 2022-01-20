@@ -6,10 +6,6 @@
   margin-left: 7px;
   margin-bottom: 2px;
 }
-#logo {
-  height: 40px;
-  width: 40px;
-}
 
 body {
   background-color: #f5f5f5;
@@ -44,6 +40,10 @@ body {
   height: auto;
 }
 
+.eachItem:hover {
+  background-color: rgb(228, 227, 227);
+}
+
 .resultImg {
   float: left;
   width: 128px;
@@ -60,10 +60,14 @@ body {
 }
 
 .header-div {
+  display: flex;
+  justify-content: space-around;
   background-color: #003744;
-  min-height: 15vh;
-  color: #fff;
+  /* background-color: #DEEBFF; */
+  height: 15%;
+  /* min-height: 15vh; */
 }
+
 
 .resultWrapper {
   display: flex;

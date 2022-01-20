@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useStore from '../store';
+
 function SearchBar() {
   const searchInput = useStore((state) => state.searchInput);
   const searchResult = useStore((state) => state.searchResult);
@@ -19,18 +20,23 @@ function SearchBar() {
       });
   }
 
+  const handleAnswerChange = (event) => {
+    if (event.key === 'Enter') {
+      getFromAPI(searchInput);
+    }
+  };
+
   return (
     <div className='container'>
+      {/* // <div> */}
       <input
         type='text'
-        className='input'
-        placeholder='Enter name..'
+        className='input mt-5 is-primary is-small'
+        placeholder='Enter title...'
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
+        onKeyPress={(event) => handleAnswerChange(event)}
       />
-      <button className='button' onClick={() => getFromAPI(searchInput)}>
-        Search
-      </button>
     </div>
   );
 }
