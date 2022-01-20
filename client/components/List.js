@@ -1,7 +1,23 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Rating } from 'react-simple-star-rating';
 import useStore from '../store.js';
 import list from '../components/styles/list.css';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { RiMovie2Line, RiMovie2Fill } from 'react-icons/ri';
+import { BsCameraReelsFill, BsCameraReels } from 'react-icons/bs';
+
+const fillColorArray = [
+  '#f17a45',
+  '#f17a45',
+  '#f19745',
+  '#f19745',
+  '#f1a545',
+  '#f1a545',
+  '#f1b345',
+  '#f1b345',
+  '#f1d045',
+  '#f1d045',
+];
 
 // helper function
 const reorder = (list, startIndex, endIndex) => {
@@ -13,6 +29,11 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 function MediaItem({ obj, index }) {
+  const [rating, setRating] = useState(0);
+  const handleRating = (rate) => {
+    console.log(rate);
+    setRating(rate);
+  };
   return (
     <Draggable draggableId={obj.imdbid} index={index}>
       {(provided) => (
@@ -23,8 +44,15 @@ function MediaItem({ obj, index }) {
           className='eachItem'
         >
           <img className='listImg' src={obj.poster} alt='list_img' />
-          <div>{obj.title}</div>
-          <div>{obj.year}</div>
+          <Rating
+            onClick={handleRating}
+            ratingValue={rating}
+            fillColorArray={fillColorArray}
+            emptyIcon={<RiMovie2Line size={18} color='black'/>}
+            fullIcon={<RiMovie2Fill size={18} />}
+          />
+          <p>{obj.title}</p>
+          <p>{obj.year}</p>
           <button>Delete</button>
         </div>
       )}
