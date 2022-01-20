@@ -1,10 +1,10 @@
 import React from 'react';
-import HypeHeader from './images/HypeHeader.png';
+import HypeHeader1 from './images/HypeHeader1.png';
 
 function Header() {
   return (
     <div className='header-div'>
-      <img src={HypeHeader} alt='headerlogo' />
+      <img src={HypeHeader1} alt='headerlogo' />
     </div>
   );
 }
