@@ -4,7 +4,10 @@ import useStore from '../store.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { RiMovie2Line, RiMovie2Fill } from 'react-icons/ri';
 import { BsCameraReelsFill, BsCameraReels } from 'react-icons/bs';
+import { IoIosCheckmarkCircleOutline, IoIosCheckmarkCircle } from 'react-icons/io';
 import { AiFillDelete, AiOutlineDelete } from 'react-icons/ai';
+import { TiDeleteOutline } from 'react-icons/ti';
+
 
 const fillColorArray = [
   '#f17a45',
@@ -31,14 +34,10 @@ const reorder = (list, startIndex, endIndex) => {
 function MediaItem({ obj, index }) {
   const [rating, setRating] = useState(0);
   const setList = useStore((state) => state.setList);
+  const setWatchedList = useStore(state => state.setWatchedList)
 
-  const handleRating = (rate) => {
-    // console.log(rate);
-    setRating(rate);
-  };
-
-  const handleDelete = (imdbid) => {
-    fetch(`http://localhost:3000/api/list/delete/${imdbid}`, {
+  const handleDelete = (obj) => {
+    fetch(`http://localhost:3000/api/list/delete/${obj.imdbid}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -52,6 +51,50 @@ function MediaItem({ obj, index }) {
       .catch((err) => console.log(err));
   };
 
+  const handleSwitch = (obj) => {
+    const body = {
+      imdbid: obj.imdbid,
+      title: obj.title,
+      year: obj.year,
+      rated: obj.rated,
+      released: obj.released,
+      runtime: obj.runtime,
+      genre: obj.genre,
+      plot: obj.plot,
+      poster: obj.poster,
+    };
+    console.log(body)
+    //delete from medialist
+    fetch(`http://localhost:3000/api/list/delete/${obj.imdbid}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((dbres) => dbres.json())
+      .then((dbdata) => {
+        setList(dbdata);
+      })
+      .catch((err) => console.log(err));
+    //add to watched
+    fetch('http://localhost:3000/api/watched', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((dbres) => dbres.json())
+      .then((dbdata) => {
+        setWatchedList(dbdata);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <Draggable draggableId={obj.imdbid} index={index}>
       {(provided) => (
@@ -61,23 +104,21 @@ function MediaItem({ obj, index }) {
           {...provided.dragHandleProps}
           className='eachItem'
         >
-          <img className='listImg' src={obj.poster} alt='list_img' />
-          {/* <Rating
-            onClick={handleRating}
-            ratingValue={rating}
-            fillColorArray={fillColorArray}
-            emptyIcon={<RiMovie2Line size={18} color='black' />}
-            fullIcon={<RiMovie2Fill size={18} />}
-          /> */}
-          <p>{obj.title}</p>
-          <p>{obj.year}</p>
-          <button
-            onClick={() => {
-              handleDelete(obj.imdbid);
-            }}
-          >
-            <AiFillDelete />
-          </button>
+          <div class="columns is-vcentered is-3">
+            <div class="column is-flex is-justify-content-space-around is-one-quarter is-centered ml-3">
+              <img class='listImg' src={obj.poster} alt='list_img' />
+            </div>
+            <div class="column is-auto is-centered">
+              <div class="column is-one-quarter is-flex is-centered is-pulled-right">
+                <div onClick={() => { handleSwitch(obj) }}><IoIosCheckmarkCircleOutline /></div>
+                <div onClick={() => { handleDelete(obj) }}><AiFillDelete /></div>
+              </div>
+              <div class="column is-auto is-centered">
+                <p class="has-text-weight-semibold">{obj.title}</p>
+                <p>{obj.year}</p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </Draggable>

@@ -29,33 +29,12 @@ const reorder = (watched, startIndex, endIndex) => {
 };
 
 function WatchedItem({ obj, index }) {
-  const [rating, setRating] = useState(0);
-  const setList = useStore((state) => state.setList);
+  const [rating, setRating] = useState(obj.rank);
   const setWatchedList = useStore((state) => state.setWatchedList);
 
-  const handleRating = (rate) => {
-    setRating(rate);
-  };
-
-  const handleSwitchToWatched = (imdbid) => {
-    // add to WatchedList
-    const addToWatchedList = fetch('http://localhost:3000/api/watchedlist', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setWatchedList(data);
-      })
-      .catch((err) => {
-        console.log('error: ', err);
-      });
-    
-    // remove from MediaList
-    const removedFromList = fetch(`http://localhost:3000/___${imdbid}`, {
-      method: 'POST',
+  const handleDelete = (imdbid) => {
+    fetch(`http://localhost:3000/api/watched/delete/${imdbid}`, {
+      method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -63,11 +42,29 @@ function WatchedItem({ obj, index }) {
     })
       .then((dbres) => dbres.json())
       .then((dbdata) => {
-        setList(dbdata);
+        setWatchedList(dbdata);
       })
       .catch((err) => console.log(err));
-
   };
+
+  const handleRating = (rate, obj) => {
+    const body = {
+      rank: rate,
+      imdbid: obj.imdbid
+    }
+    fetch(`http://localhost:3000/api/watched/rank`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(res => res.json())
+      .then(data => setRating(data))
+      .catch(err => console.log(err))
+  };
+
 
   return (
     <Draggable draggableId={obj.imdbid} index={index}>
@@ -78,30 +75,27 @@ function WatchedItem({ obj, index }) {
           {...provided.dragHandleProps}
           className='eachItem'
         >
-          <img className='listImg' src={obj.poster} alt='list_img' />
-          <Rating
-            onClick={handleRating}
-            ratingValue={rating}
-            fillColorArray={fillColorArray}
-            emptyIcon={<RiMovie2Line size={18} color='black' />}
-            fullIcon={<RiMovie2Fill size={18} />}
-          />
-          <p>{obj.title}</p>
-          <p>{obj.year}</p>
-          <button
-            onClick={() => {
-              handleSwitchToWatched(obj.imdbid);
-            }}
-          >
-            < IoIosCheckmarkCircleOutline/>
-          </button>
-          <button
-            onClick={() => {
-              handleDelete(obj.imdbid);
-            }}
-          >
-            <AiFillDelete />
-          </button>
+          <div class="columns is-vcentered is-3">
+            <div class="column is-narrow is-flex is-justify-content-space-around is-one-quarter is-centered ml-3">
+              <img class='listImg' src={obj.poster} alt='list_img' />
+            </div>
+            <div class="column is-auto is-centered">
+              <div class="column is-one-half is-flex is-centered is-pulled-right">
+                <Rating class="is-center-pulled-left"
+                  onClick={(e) => handleRating(e, obj)}
+                  ratingValue={rating}
+                  fillColorArray={fillColorArray}
+                  emptyIcon={<RiMovie2Line size={18} color='black' />}
+                  fullIcon={<RiMovie2Fill size={18} />}
+                />
+                <div onClick={() => { handleDelete(obj.imdbid) }}> <AiFillDelete /></div>
+              </div>
+              <div class="column is-auto is-centered">
+                <p class="has-text-weight-semibold">{obj.title}</p>
+                <p>{obj.year}</p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </Draggable>
@@ -117,11 +111,10 @@ const WatchedList = React.memo(function WatchedList({ watched }) {
 
 function Watched() {
   const watched = useStore((state) => state.watched);
-  const setList = useStore((state) => state.setList);
   const setWatchedList = useStore((state) => state.setWatchedList);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/watchedlist', {
+    fetch('http://localhost:3000/api/watched', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -130,6 +123,7 @@ function Watched() {
       .then((res) => res.json())
       .then((data) => {
         setWatchedList(data);
+
       })
       .catch((err) => {
         console.log('error: ', err);
@@ -145,13 +139,13 @@ function Watched() {
       return;
     }
 
-    const newList = reorder(
+    const newWatched = reorder(
       watched,
       result.source.index,
       result.destination.index
     );
 
-    setList(newList);
+    setWatchedList(newWatched);
   }
 
   // useEffect for GET api

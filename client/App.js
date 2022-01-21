@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Result from './components/Result.js';
 import SearchBar from './components/SearchBar.js';
 import List from './components/List';
-import MainPageCenter from './components/MainPageCenter';
+import Watched from './components/Watched'
 import './index.scss'
 
 
@@ -17,14 +17,14 @@ function App() {
 
       <article class="columns mt-3 mx-2">
         <section class="column is-narrow">
-          <h1>Watched</h1>
+          <p class="title is-5">Watched</p>
+          <Watched/>
         </section>
-        <section class="column">
-          <h1>Welcome!</h1>
+        <section class="column is-centered">
           <Result />
         </section>
         <section class="column is-narrow">
-          <h1>List</h1>
+        <p class="title is-5">To-Watch List</p>
           <List />
         </section>
       </article>

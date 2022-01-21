@@ -42,11 +42,16 @@ function Result() {
       });
   }
   return (
-    <div className='container'>
+    <div className='resultWrapper'>
       {searchResult.map(({ Title, Year, imdbID, Poster }) => (
-        <div className='card_item' key={imdbID}>
+        <div className='eachItem' class="column" key={imdbID}>
+          <div class="box is-flex is-flex-direction-column is-justify-content-center has-text-centered">
+          <div class="card-image has-text-centered">
+          {/* <figure class="image is-64x64 is-inline-block"> */}
           <img className='resultImg' src={Poster} alt='movieposter' />
-          <div>{Title}</div>
+          {/* </figure> */}
+          </div>
+          <p class="has-text-weight-semibold">{Title}</p>
           <div>{Year}</div>
           <button
             className='add_btn'
@@ -56,6 +61,7 @@ function Result() {
           >
             Add
           </button>
+          </div>
         </div>
       ))}
     </div>
