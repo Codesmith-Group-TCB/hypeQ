@@ -28,7 +28,6 @@ function SearchBar() {
 
   return (
     <div className='container'>
-      {/* // <div> */}
       <input
         type='text'
         className='input mt-5 is-primary is-small'

@@ -3,23 +3,34 @@ import Header from './components/Header';
 import Result from './components/Result.js';
 import SearchBar from './components/SearchBar.js';
 import List from './components/List';
+import Watched from './components/Watched'
+import './index.scss'
+
 
 function App() {
   return (
-    <div className=''>
+    <div>
       <Header />
       <div className='SearchContainer'>
         <SearchBar />
       </div>
-      <div className='MainContainer'>
-        <div className='listContainer'>
-          <List />
-        </div>
-        <div className='resultContainer'>
+
+      <article class="columns mt-3 mx-2">
+        <section class="column is-narrow">
+          <p class="title is-5">Watched</p>
+          <Watched/>
+        </section>
+        <section class="column is-centered">
           <Result />
-        </div>
-      </div>
+        </section>
+        <section class="column is-narrow">
+        <p class="title is-5">To-Watch List</p>
+          <List />
+        </section>
+      </article>
+
     </div>
+
   );
 }
 
